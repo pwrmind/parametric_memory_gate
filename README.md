@@ -1,4 +1,4 @@
-# Parametric Memory Gate (PMG) for PyTorch
+# ⛩️ Parametric Memory Gate (PMG) for PyTorch
 
 [![PyTorch Compatible](https://shields.io)](https://pytorch.org)
 [![License: MIT](https://shields.io)](https://opensource.org)
