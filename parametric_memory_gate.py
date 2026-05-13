@@ -79,3 +79,24 @@ class ParametricMemoryGate(nn.Module):
             return f"ParametricMemoryGate(learned_base={base:.4f}, learned_shift={shift:.4f})"
         except Exception:
             return "ParametricMemoryGate()"
+
+class ParametricMemoryGateNP:
+    def __init__(self, base: float = 5.0, shift: float = -0.1):
+        # Эмулируем параметры, которые были обучены в PyTorch
+        self.base = base
+        self.shift = shift
+        self.eps = 1e-7
+
+    def forward_step(self, x: float) -> float:
+        """
+        Сверхбыстрый пошаговый инференс для реального времени (внутри цикла полетного контроллера)
+        """
+        # Ограничение экспоненты для предотвращения OverflowError в оригинальном стиле
+        power = np.clip(x + self.shift, -20.0, 20.0)
+        
+        # Основная формула PMG
+        base_pow = self.base ** power
+        gate = base_pow / (1.0 + base_pow)
+        
+        # Защита от аппаратного округления
+        return np.clip(gate, self.eps, 1.0 - self.eps)
