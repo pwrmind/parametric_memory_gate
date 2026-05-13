@@ -100,3 +100,40 @@ class ParametricMemoryGateNP:
         
         # Защита от аппаратного округления
         return np.clip(gate, self.eps, 1.0 - self.eps)
+
+# class DifferentialMemoryGate(nn.Module):
+#     def __init__(self, initial_base: float = 4.0, initial_shift: float = -1.0):
+#         super().__init__()
+#         if initial_base <= 1.0:
+#             raise ValueError("initial_base must be strictly greater than 1.0")
+            
+#         raw_base_init = np.log(initial_base - 1.0)
+#         self.raw_base = nn.Parameter(torch.tensor([raw_base_init], dtype=torch.float32))
+#         self.shift = nn.Parameter(torch.tensor([initial_shift], dtype=torch.float32))
+        
+#         # Внутреннее состояние памяти для хранения предыдущего шага
+#         self.register_buffer('x_prev', torch.tensor([0.0], dtype=torch.float32))
+
+#     def reset(self):
+#         """Сброс памяти при старте новой сессии телеметрии"""
+#         self.x_prev.fill_(0.0)
+
+#     def forward(self, x_t: torch.Tensor) -> torch.Tensor:
+#         """
+#         Пошаговое или последовательное выполнение.
+#         Автоматически рассчитывает дельту относительно x_prev сохраненного внутри.
+#         """
+#         base = 1.0 + torch.exp(self.raw_base)
+        
+#         # Встроенный расчет дифференциала скорости изменения
+#         delta_x = x_t - self.x_prev
+        
+#         # Обновляем внутреннюю память текущим значением
+#         # detach() критически важен, чтобы граф вычислений не рос бесконечно во времени
+#         self.x_prev.copy_(x_t.detach())
+        
+#         power = torch.clamp(delta_x + self.shift, -20.0, 20.0)
+#         gate = (base ** power) / (1.0 + (base ** power))
+        
+#         eps = 1e-7
+#         return torch.clamp(gate, eps, 1.0 - eps)
