@@ -51,6 +51,11 @@ class ParametricMemoryGate(nn.Module):
         
         # Core mathematical formulation
         gate = (base ** power) / (1.0 + (base ** power))
+        
+        # Защита от аппаратного округления до абсолютных 0.0 или 1.0
+        eps = 1e-7
+        gate = torch.clamp(gate, eps, 1.0 - eps)
+        
         return gate
 
     def get_parameters(self) -> Tuple[float, float]:
