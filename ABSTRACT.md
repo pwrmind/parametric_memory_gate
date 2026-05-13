@@ -2,7 +2,7 @@
 
 **Title:** Parametric Memory Gate (PMG): A Trainable Gating Activation Function with Asymmetric Noise Suppression for High-Volatility Sequence Modeling
 
-**Authors:** [Your Name / GitHub Username]
+**Authors:** ([Алексей Бабанов / pwrmind](https://github.com/pwrmind))
 
 **Keywords:** Activation Functions, Gated Recurrent Neural Networks, Time-Series Forecasting, Noise Suppression, Dynamic Parameterization.
 
